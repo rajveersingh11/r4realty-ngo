@@ -1,0 +1,62 @@
+name: CI - Quality & Build Verification
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build & Verify (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [22.x, 24.x]
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: TypeScript Type-Check & Production Build
+        run: npm run build
+
+      - name: Test Native SQLite Micro-API Health
+        run: |
+          node -e "
+          import('./server.mjs').then(() => {
+            setTimeout(async () => {
+              try {
+                const res = await fetch('http://localhost:3001/api/health');
+                const data = await res.json();
+                if (data.status !== 'online') {
+                  console.error('Server status mismatch:', data);
+                  process.exit(1);
+                }
+                console.log('✔ SQLite CI Health Check Passed:', data.status, data.database);
+                process.exit(0);
+              } catch (err) {
+                console.error('CI Health Check Error:', err);
+                process.exit(1);
+              }
+            }, 1000);
+          });
+          "

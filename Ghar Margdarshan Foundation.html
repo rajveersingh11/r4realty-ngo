@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ghar Margdarshan Foundation</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F1E7;--sf:#FFFFFF;--tx:#1B2B2A;--mu:#4A5A58;--pr:#0F4C4A;--on:#FFFFFF;--ac:#F2C14E;--bd:#D9D2C3;--wr:#FBE9E4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101817;--sf:#18221F;--tx:#EEE8DA;--mu:#B5BDB8;--pr:#6FC4BC;--on:#0B1F1E;--bd:#2D3B38;--wr:#3A211A}}
+:root[data-theme="dark"]{--bg:#101817;--sf:#18221F;--tx:#EEE8DA;--mu:#B5BDB8;--pr:#6FC4BC;--on:#0B1F1E;--bd:#2D3B38;--wr:#3A211A}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 'DM Sans',system-ui,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--sf);z-index:10}
+a{color:var(--pr)}
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;color:var(--pr);line-height:1.15;margin:0 0 12px}
+h1{font-size:clamp(30px,6vw,50px)}h2{font-size:28px;margin-top:40px}h3{font-size:20px}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--sf);border-bottom:1px solid var(--bd);z-index:9;padding:10px 16px}
+.top{max-width:1100px;margin:auto;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.logo{font:600 19px 'Fraunces',serif;color:var(--pr);text-decoration:none}
+nav{display:flex;gap:4px;overflow-x:auto;white-space:nowrap;flex:1}
+nav a{padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--tx);font-size:15px}
+nav a.on{background:var(--pr);color:var(--on)}
+#q{padding:9px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit;width:170px}
+main{max-width:1100px;margin:auto;padding:24px 16px 100px}
+.lead{font-size:19px;color:var(--mu);max-width:640px}
+.hero{padding:32px 0}
+.pill{display:inline-block;background:var(--ac);color:#2B2000;font-size:13px;font-weight:700;padding:5px 14px;border-radius:999px;margin-bottom:14px}
+.btn{display:inline-block;background:var(--pr);color:var(--on);border:2px solid var(--pr);padding:12px 22px;min-height:44px;border-radius:8px;font:700 16px 'DM Sans',sans-serif;text-decoration:none;cursor:pointer;margin:4px 8px 4px 0}
+.btn.alt{background:transparent;color:var(--pr)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.card{display:block;background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:20px;color:var(--tx);text-decoration:none}
+a.card:hover{border-color:var(--pr)}
+.card p{margin:0 0 8px;color:var(--mu)}
+details{background:var(--sf);border:1px solid var(--bd);border-radius:12px;margin:8px 0;padding:4px 16px}
+summary{cursor:pointer;font-weight:700;padding:10px 0;min-height:44px}
+details div{padding-bottom:10px;color:var(--mu)}
+ul{margin:6px 0;padding-left:20px}li{margin:4px 0}
+label{display:block;font-size:14px;font-weight:500;margin:10px 0}
+input,select,textarea{display:block;width:100%;margin-top:4px;padding:10px 12px;min-height:44px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+label.chk{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:15px}
+label.chk input{width:22px;min-height:22px;margin:2px 0 0;flex:none}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 16px}
+.out{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:14px}
+.out div{background:var(--bg);border-radius:10px;padding:12px}
+.out span{display:block;font-size:13px;color:var(--mu)}.out b{font-size:20px;color:var(--pr)}
+.note{font-size:13px;color:var(--mu)}
+.warn{background:var(--wr)}
+.wa{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#25D366;color:#06210F;font-weight:700;padding:12px 18px;border-radius:999px;text-decoration:none;z-index:9;min-height:44px}
+footer{max-width:1100px;margin:auto;padding:24px 16px 80px;font-size:14px;color:var(--mu);border-top:1px solid var(--bd)}
+@media print{header,.wa,footer,.btn{display:none}}
+</style>
+</head>
+<body>
+<header><div class="top"><a class="logo" href="#home">Ghar Margdarshan</a><nav id="nav"></nav><input id="q" type="search" placeholder="Search guides and FAQs" aria-label="Search guides and FAQs"></div></header>
+<main id="app"></main>
+<a class="wa" id="wa" href="#" target="_blank" rel="noopener">WhatsApp us</a>
+<footer>Ghar Margdarshan Foundation · Non-profit, independent, free · [CIN / 12A / 80G NUMBERS] · <a href="#legal">Privacy, terms and disclaimer</a><br>General education only, not legal, tax or financial advice.</footer>
+<script>
+const WA="91XXXXXXXXXX",EM="[YOUR EMAIL]",PH="[YOUR PHONE]";
+const app=document.getElementById("app");
+const inr=n=>"₹"+Math.round(n).toLocaleString("en-IN");
+const H=(t,s)=>`<h1>${t}</h1>${s?`<p class="lead">${s}</p>`:""}`;
+const card=(t,b)=>`<div class="card"><h3>${t}</h3>${b}</div>`;
+const lk=(h,t,b)=>`<a class="card" href="#${h}"><h3>${t}</h3><p>${b}</p></a>`;
+const ul=a=>"<ul>"+a.map(x=>`<li>${x}</li>`).join("")+"</ul>";
+const acc=(t,b)=>`<details><summary>${t}</summary><div>${b}</div></details>`;
+const out=r=>`<div class="out">`+r.map(x=>`<div><span>${x[0]}</span><b>${x[1]}</b></div>`).join("")+`</div>`;
+const emi=(p,r,n)=>{const i=r/1200;return i?p*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1):p/n};
+const pv=(e,r,n)=>{const i=r/1200;return e*(1-Math.pow(1+i,-n))/i};
+
+const GUIDES=[
+[`Buying your first home`,ul([`Decide why you are buying and set a budget before you look at properties.`,`Plan for a down payment of 10–20% plus about 8–10% for stamp duty, registration and other costs.`,`Check your credit score early and fix errors.`,`Shortlist by commute, builder track record and RERA status, not by discounts.`,`Verify title and approvals, then get your loan sanctioned.`,`Read the agreement for sale fully, register it, and inspect before taking possession.`])],
+[`Home loans, simply`,ul([`Banks look at income, existing EMIs, age, credit score and the property.`,`A score around 750 or higher usually gets better rates.`,`Compare the interest rate, processing fee, prepayment charges and floating or fixed terms.`,`Try to keep your total EMIs within about 40% of monthly income.`,`Read the sanction letter before paying any builder instalment.`])],
+[`RERA basics`,ul([`RERA is the Real Estate (Regulation and Development) Act, 2016. Each state has its own authority and portal.`,`Most projects must be registered before they are advertised or sold.`,`Every registered project gets a number you can verify online.`,`You can file a complaint with the state authority if a builder breaks the rules.`])],
+[`Registration and stamp duty`,ul([`Stamp duty is a state tax paid on the property value. Registration is a separate fee.`,`Rates vary by state, buyer gender, area and property type.`,`Ownership is proved by a registered sale deed, and you should apply for mutation afterwards.`,`Always confirm current rates on your state’s official portal or with the sub-registrar.`])]];
+const CL={prop:[`Property verification`,[`RERA registration number checked on the state portal`,`Title chain reviewed by a lawyer`,`Encumbrance certificate obtained`,`Approved layout or building plan seen`,`Authority or society approvals confirmed`,`Occupancy or completion certificate (OC/CC) seen, for ready homes`,`No pending litigation or dues`]],
+docs:[`Documents to ask the builder for`,[`Allotment letter`,`Builder-buyer agreement draft`,`RERA registration certificate`,`Sanctioned plan and layout`,`Payment schedule and receipts`,`NOC from the bank, if the land is mortgaged`,`Possession letter and tax receipts, for ready homes`]],
+pre:[`Pre-booking checklist`,[`Total cost compared, including parking, maintenance and GST`,`Agreement read in full with a lawyer`,`No more than 10% paid before a registered agreement`,`Payments made only by bank transfer to the project’s account`,`Possession date and delay compensation written down`,`Written receipt for every payment`,`Loan sanction in hand`]]};
+const FAQ=[
+[`Do I need a broker to buy a home?`,`No. Many projects sell directly. Whoever you use, ask how they are paid and get everything in writing.`],
+[`What is the difference between carpet area and super area?`,`Carpet area is the usable floor area inside the walls. Super area adds a share of common spaces. RERA requires sale by carpet area.`],
+[`How much down payment do I need?`,`Banks usually fund up to 75–90% of the price, so plan for 10–25% plus stamp duty and other costs.`],
+[`Is a builder’s RERA number enough proof?`,`No. Search the number on your state’s RERA portal and confirm it matches the project and promoter.`],
+[`What is OC/CC?`,`The occupancy certificate (OC) and completion certificate (CC) show the building was completed as per approved plans.`],
+[`Can I get a refund if possession is delayed?`,`Under RERA you can choose to withdraw and get a refund with interest, or stay and receive interest for each month of delay.`],
+[`Are assured-return schemes safe?`,`Not automatically. Returns depend on the developer’s ability to pay. Ask for documents, check the structure and treat them as a risk, not a guarantee.`],
+[`How is EMI calculated?`,`From the loan amount, interest rate and tenure. Use the EMI calculator on this site to test options.`],
+[`Should I rent or buy?`,`It depends on how long you will stay, prices, rent and rates. The rent vs buy tool gives a rough comparison.`],
+[`How do I report a suspicious offer?`,`Use the report form on the Protect page. You can also complain to your state’s RERA authority or the police.`]];
+const GL=[[`Carpet area`,`Usable floor area inside the walls of a home.`],[`Super area`,`Carpet area plus a share of common areas such as lobbies and lifts.`],[`OC / CC`,`Occupancy and completion certificates issued by the authority.`],[`Possession`,`When the builder hands over the home to you.`],[`Sale deed`,`The registered document that transfers ownership.`],[`Agreement for sale`,`The contract signed before the sale deed.`],[`Encumbrance`,`A loan, charge or claim on a property.`],[`Mutation`,`Updating revenue or municipal records to your name.`],[`EMI`,`Equated monthly instalment on a loan.`],[`Escrow account`,`A separate account where project funds are held.`]];
+const RIGHTS=[[`Registered projects only`,`Builders must register with RERA before advertising or selling.`],[`Sale by carpet area`,`Prices must be based on carpet area, not super area.`],[`Cap on advance`,`A builder cannot take more than 10% before a registered agreement for sale.`],[`Separate project account`,`70% of buyer money must be kept in a project account for that project.`],[`Delay compensation`,`Refund with interest, or interest for every month of delay.`],[`Structural defects`,`The builder must fix defects reported within 5 years of possession at no cost.`],[`No unilateral plan changes`,`Major changes need the consent of the buyers.`]];
+const IDX=[...GUIDES.map(g=>[g[0],g[1],"learn"]),...FAQ.map(q=>[q[0],q[1],"learn"]),...GL.map(g=>[g[0],g[1],"learn"]),...RIGHTS.map(r=>[`Your right: ${r[0]}`,r[1],"protect"])];
+
+const TOOLS={
+emi:{t:`EMI calculator`,f:[[`p`,`Loan amount (₹)`,5000000],[`r`,`Interest rate (% a year)`,8.75],[`y`,`Tenure (years)`,20]],c:v=>{const n=v.y*12,e=emi(v.p,v.r,n);return out([[`Monthly EMI`,inr(e)],[`Total interest`,inr(e*n-v.p)],[`Total payment`,inr(e*n)]])}},
+elig:{t:`Home loan eligibility estimator`,f:[[`i`,`Monthly income (₹)`,100000],[`e`,`Existing EMIs (₹ a month)`,0],[`r`,`Interest rate (% a year)`,8.75],[`y`,`Tenure (years)`,20]],c:v=>{const m=Math.max(0,v.i*.45-v.e);return out([[`Max new EMI`,inr(m)],[`Estimated loan`,inr(pv(m,v.r,v.y*12))]])+`<p class="note">Assumes banks allow total EMIs of about 45% of income. Real offers depend on credit score, age and property.</p>`}},
+aff:{t:`Affordability calculator`,f:[[`i`,`Monthly income (₹)`,100000],[`e`,`Existing EMIs (₹ a month)`,0],[`s`,`Savings for down payment (₹)`,1500000],[`r`,`Interest rate (% a year)`,8.75],[`y`,`Tenure (years)`,20]],c:v=>{const m=Math.max(0,v.i*.35-v.e),l=pv(m,v.r,v.y*12);return out([[`Comfortable EMI (35% of income)`,inr(m)],[`Loan you can carry`,inr(l)],[`Home price you can afford`,inr(l+v.s*.92)]])+`<p class="note">Keeps 8% of your savings aside for stamp duty and other costs.</p>`}},
+stamp:{t:`Stamp duty and registration estimator`,f:[[`p`,`Property price (₹)`,6000000],[`s`,`State (indicative rate)`,[[8,`Uttar Pradesh`],[7,`Delhi`],[7,`Maharashtra`],[6,`Karnataka`]],1],[`c`,`Or enter your own total rate (%)`,0]],c:v=>{const r=v.c>0?v.c:v.s;return out([[`Rate used`,r+`%`],[`Estimated cost`,inr(v.p*r/100)]])+`<p class="note">Indicative combined rates only. They change and vary by buyer and property. Confirm with your sub-registrar.</p>`}},
+rvb:{t:`Rent vs buy calculator`,f:[[`p`,`Home price (₹)`,6000000],[`d`,`Down payment (%)`,20],[`r`,`Loan interest (% a year)`,8.75],[`y`,`Years you will stay`,10],[`rent`,`Monthly rent (₹)`,20000],[`a`,`Price growth (% a year)`,5]],c:v=>{const n=v.y*12,L=v.p*(1-v.d/100),e=emi(L,v.r,n),i=v.r/1200;let b=L;for(let k=0;k<n;k++)b=b*(1+i)-e;const fv=v.p*Math.pow(1+v.a/100,v.y);let rt=0;for(let k=0;k<v.y;k++)rt+=v.rent*12*Math.pow(1.05,k);const nb=v.p*v.d/100+e*n-(fv-b);return out([[`Monthly EMI`,inr(e)],[`Net cost of buying`,inr(nb)],[`Total rent paid`,inr(rt)],[`Cheaper option`,nb<rt?`Buying`:`Renting`]])+`<p class="note">Assumes rent rises 5% a year. Ignores tax, maintenance and what your money could earn elsewhere.</p>`}},
+yld:{t:`Rental yield calculator`,f:[[`p`,`Property price (₹)`,5000000],[`r`,`Monthly rent (₹)`,30000],[`c`,`Yearly costs: tax, maintenance, vacancy (₹)`,40000]],c:v=>out([[`Gross yield`,(v.r*12/v.p*100).toFixed(2)+`%`],[`Net yield`,((v.r*12-v.c)/v.p*100).toFixed(2)+`%`]])}};
+function tool(k){const T=TOOLS[k];return `<div class="card" id="t-${k}" style="margin-bottom:16px"><h3>${T.t}</h3><div class="fg">${T.f.map(f=>`<label>${f[1]}${f[3]?`<select data-k="${f[0]}">${f[2].map(o=>`<option value="${o[0]}">${o[1]}</option>`).join("")}</select>`:`<input type="number" step="any" inputmode="decimal" data-k="${f[0]}" value="${f[2]}">`}</label>`).join("")}</div><div class="res"></div></div>`}
+function wire(){document.querySelectorAll("[id^=t-]").forEach(el=>{const T=TOOLS[el.id.slice(2)];const run=()=>{const v={};el.querySelectorAll("[data-k]").forEach(i=>v[i.dataset.k]=+i.value);let h="";try{h=T.c(v)}catch(e){}el.querySelector(".res").innerHTML=/NaN|Infinity/.test(h)||!h?`<p class="note">Enter valid numbers above.</p>`:h};el.oninput=run;run()})}
+function cl(k){let s={};try{s=JSON.parse(localStorage.getItem("cl-"+k)||"{}")}catch(e){}return `<div class="card"><h3>${CL[k][0]}</h3>`+CL[k][1].map((x,i)=>`<label class="chk"><input type="checkbox" ${s[i]?"checked":""} onchange="tick('${k}',${i},this.checked)"> ${x}</label>`).join("")+`<button class="btn alt" onclick="window.print()">Print or save as PDF</button></div>`}
+function tick(k,i,c){try{const s=JSON.parse(localStorage.getItem("cl-"+k)||"{}");s[i]=c;localStorage.setItem("cl-"+k,JSON.stringify(s))}catch(e){}}
+function form(title,tag,fields,long){return `<form class="card" onsubmit="return send(event,'${tag}')" style="margin-bottom:16px"><h3>${title}</h3>${fields.map(f=>`<label>${f}<input name="${f}" required></label>`).join("")}${long?`<label>${long}<textarea name="${long}" rows="4" required></textarea></label>`:""}<label class="chk"><input type="checkbox" name="consent" required> <span>I agree to the <a href="#legal">privacy policy</a> and consent to being contacted about this request.</span></label><button class="btn" type="submit">Send on WhatsApp</button><p class="note">Opens WhatsApp with your message ready. This site does not store what you type.</p></form>`}
+function send(e,tag){e.preventDefault();let m=`*${tag}*\n`;new FormData(e.target).forEach((v,k)=>{if(k!="consent")m+=`${k}: ${v}\n`});window.open(`https://wa.me/${WA}?text=${encodeURIComponent(m)}`,"_blank");return false}
+const ph=t=>`<div class="card"><p>${t}</p></div>`;
+
+const V={
+home:()=>`<section class="hero"><span class="pill">Non-profit · Independent · Free</span>${H(`Your first home deserves honest advice.`,`Free, unbiased guidance for first-time buyers, investors and families. We take no commissions, so we never have a reason to push a property.`)}<a class="btn" href="#contact">Ask a free question</a><a class="btn alt" href="#tools">Try free calculators</a></section><h2>Who we help</h2><div class="grid">${card(`First-time homebuyers`,`<p>Budget, loans, EMI, stamp duty and paperwork in plain language.</p>`)}${card(`New investors`,`<p>Yield, risk and liquidity, including how assured-return schemes work.</p>`)}${card(`Families and NRIs`,`<p>Due diligence and fraud checks for flats, plots and inherited property.</p>`)}</div><h2>Explore</h2><div class="grid">${lk(`learn`,`Learn`,`Guides, checklists, FAQ and glossary.`)}${lk(`tools`,`Free tools`,`Six calculators for buyers and investors.`)}${lk(`protect`,`Protect yourself`,`Scam alerts, RERA check and your rights.`)}${lk(`community`,`Community`,`Workshops, stories and ways to get involved.`)}</div>`,
+learn:()=>H(`Learn the basics`,`Plain-language guides, checklists, answers and a glossary.`)+`<h2>Beginner’s guides</h2>`+GUIDES.map(g=>acc(g[0],g[1])).join("")+`<h2>Checklists</h2><div class="grid">`+Object.keys(CL).map(cl).join("")+`</div><h2>Blog</h2>`+ph(`Short articles in Hindi and English will appear here. [ADD YOUR FIRST POSTS]`)+`<h2>FAQ</h2>`+FAQ.map(q=>acc(q[0],`<p>${q[1]}</p>`)).join("")+`<h2>Glossary</h2><div class="grid">`+GL.map(g=>card(g[0],`<p>${g[1]}</p>`)).join("")+`</div>`,
+tools:()=>H(`Free tools`,`Estimates to help you plan. They are not offers or advice.`)+Object.keys(TOOLS).map(tool).join(""),
+protect:()=>H(`Protect yourself`,`Most property fraud starts with pressure. Slow down and verify.`)+`<h2>Scam alerts</h2><div class="card warn">${ul([`Fake or mismatched RERA numbers`,`The same plot sold to more than one buyer`,`Pressure to pay a token or advance today`,`Guaranteed returns with no documents`,`Sales on power of attorney without a registered deed`,`Ads with prices far below the market`])}</div><h2>RERA verification guide</h2>${card(`Check any project in 6 steps`,`<ol><li>Note the RERA number from the ad or brochure.</li><li>Open your state’s official RERA portal.</li><li>Search by number or project name.</li><li>Match promoter name, location, status and completion date.</li><li>Look for approved plans, quarterly updates and complaints.</li><li>Check that the agent is registered too, and save screenshots.</li></ol>`)}<h2>Know your rights</h2><div class="grid">${RIGHTS.map(r=>card(r[0],`<p>${r[1]}</p>`)).join("")}</div><h2>Report a suspicious offer</h2>${form(`Tell us what you saw`,`Suspicious offer report`,[`Your name`,`Phone`],`What happened`)}`,
+community:()=>H(`Community`,`Learn together and help others do the same.`)+`<h2>Workshops and webinars</h2>`+ph(`No sessions scheduled yet. [DATE · TOPIC · PLACE]`)+`<div class="grid">${form(`Register interest in a workshop`,`Workshop registration`,[`Name`,`Phone`,`Topic you want`])}${form(`Ask an expert`,`Ask an expert`,[`Name`],`Your question`)}</div><h2>Ask an expert library</h2>${ph(`Anonymised answers will be added here over time.`)}<h2>Success stories</h2>${ph(`Stories appear here only with the person’s consent. [ADD STORY]`)}<h2>Newsletter and WhatsApp channel</h2><div class="grid">${form(`Monthly tips and scam alerts`,`Newsletter signup`,[`Name`,`Email`])}${card(`WhatsApp channel`,`<p>Quick tips and alerts.</p><a class="btn" href="#" target="_blank" rel="noopener">Join channel [ADD LINK]</a>`)}</div><h2>Get involved</h2><div class="grid">${form(`Become a volunteer expert`,`Volunteer expert`,[`Name`,`Profession (lawyer, CA, banker, architect)`,`City`])}${form(`Partner with us`,`Partnership`,[`Organisation`,`Type (college, society, community group)`,`Contact person and phone`])}</div>`,
+about:()=>H(`About us`,`A non-profit helping people make safer property decisions.`)+`<div class="grid">${card(`Our mission`,`<p>Give every buyer and investor free, honest guidance, whatever their budget.</p>`)}${card(`Why we started`,`<p>[ADD YOUR STORY IN 2–3 SENTENCES]</p>`)}</div><h2>Our promise</h2><div class="card">${ul([`No commissions, ever, from builders, brokers or agents.`,`No selling and no property referrals for a fee.`,`Sponsors, if any, never see your details or influence advice.`,`Free for everyone, with no sign-up.`])}</div><h2>Team</h2><div class="grid">${card(`Founder`,`<p>[NAME · ROLE · SHORT BIO]</p>`)}${card(`Team member`,`<p>[NAME · ROLE]</p>`)}</div><h2>Advisory board</h2><div class="grid">${[`Property lawyer`,`Chartered accountant`,`Banker`,`Architect`].map(r=>card(r,`<p>[NAME · QUALIFICATION · PHOTO]</p>`)).join("")}</div><h2>Conflict of interest and funding</h2>${ph(`How we are funded today: [STATE CLEARLY]. We do not accept donations at present. Anyone connected to a property business must declare it.`)}<h2>Impact so far</h2><div class="grid">${[`People helped`,`Questions answered`,`Workshops held`].map(x=>card(x,`<p><b style="font-size:28px">[—]</b></p><p class="note">Add real numbers only.</p>`)).join("")}</div><h2>Registration details</h2>${ph(`Entity: [SECTION 8 / TRUST] · CIN: [—] · 12A: [—] · 80G: [—] · PAN: [—]`)}`,
+contact:()=>H(`Contact us`,`Ask a free question. We reply with neutral guidance, not a sales pitch.`)+`<div class="grid">${card(`WhatsApp`,`<a class="btn" href="https://wa.me/${WA}" target="_blank" rel="noopener">Chat now</a>`)}${card(`Phone and email`,`<p>${PH}</p><p>${EM}</p>`)}</div><h2>Enquiry form</h2>${form(`Send us your question`,`Free question`,[`Name`,`Phone`],`Your question`)}`,
+legal:()=>H(`Privacy, terms and disclaimer`,`Draft text. Have a lawyer review it before launch.`)+card(`Privacy policy`,`<p>We collect only what you type into a form (such as name, phone and your question) to respond to you. Forms open WhatsApp, so your message goes through WhatsApp under its terms. This site does not store your entries. Checklist ticks are saved only in your own browser. You can ask us to delete anything we hold by contacting ${EM}. [REVIEW AGAINST THE DPDP ACT]</p>`)+card(`Terms of use`,`<p>Use this site lawfully and for personal learning. Content may change without notice. We may decline questions outside our scope. [ADD JURISDICTION]</p>`)+card(`Disclaimer`,`<p>Everything here is general education, not legal, tax or financial advice. Calculators give estimates only. Laws, rates and rules change, so verify with official sources and qualified professionals before acting. We do not sell, broker or recommend specific projects, and we are not liable for decisions made using this site.</p>`)};
+const NAV=[[`home`,`Home`],[`learn`,`Learn`],[`tools`,`Tools`],[`protect`,`Protect`],[`community`,`Community`],[`about`,`About`],[`contact`,`Contact`]];
+function go(){const h=(location.hash||"#home").slice(1);const v=V[h]?h:"home";app.innerHTML=V[v]();wire();document.getElementById("nav").innerHTML=NAV.map(n=>`<a href="#${n[0]}" class="${n[0]==v?"on":""}">${n[1]}</a>`).join("");document.getElementById("q").value="";window.scrollTo(0,0)}
+function S(q){q=q.toLowerCase();const r=IDX.filter(x=>(x[0]+x[1]).toLowerCase().includes(q));app.innerHTML=H(`Search results`,`${r.length} result(s)`)+r.map(x=>`<a class="card" href="#${x[2]}" style="margin-bottom:12px"><h3>${x[0]}</h3><p>${x[1].replace(/<[^>]+>/g," ").slice(0,160)}…</p></a>`).join("")}
+document.getElementById("q").oninput=e=>{const q=e.target.value.trim();if(q)S(q);else{const v=location.hash.slice(1);app.innerHTML=V[V[v]?v:"home"]();wire()}};
+document.getElementById("wa").href=`https://wa.me/${WA}?text=${encodeURIComponent("Hi, I have a question about property.")}`;
+addEventListener("hashchange",go);go();
+</script>
+</body>
+</html>

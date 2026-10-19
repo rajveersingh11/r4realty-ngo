@@ -1,0 +1,10 @@
+# Robots.txt for R4Realty - Ghar Margdarshan Foundation
+# Independent, Non-Profit Real Estate Guidance & Internet Market Analytics
+
+User-agent: *
+Allow: /
+Disallow: /api/admin/
+
+# Sitemaps
+Sitemap: https://rajveersingh11.github.io/r4realty-ngo/sitemap.xml
+Sitemap: https://gharmargdarshan.org/sitemap.xml

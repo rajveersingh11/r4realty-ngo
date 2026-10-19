@@ -1,0 +1,38 @@
+name: 💡 Feature or Micro-Market Addition Request
+description: Propose a new calculation tool, regional language translation, or micro-market expansion.
+title: "[FEATURE]: "
+labels: ["enhancement", "community-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We welcome proposals that enhance consumer transparency and protect homebuyers!
+  - type: dropdown
+    id: feature_type
+    attributes:
+      label: Feature Type
+      options:
+        - "New City / Micro-Market Data Addition"
+        - "New State RERA Authority / Statutory Rules"
+        - "Vernacular Language Support (Hindi, Marathi, Kannada, Tamil, etc.)"
+        - "New Financial Calculator / Simulator"
+        - "Consumer Protection / Fraud Playbook Addition"
+        - "Other"
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Feature Description
+      description: Explain what you would like to see added and how it benefits everyday homebuyers.
+      placeholder: "e.g. Add Tier-2 micro-market rental yields and circle rates for Lucknow and Jaipur..."
+    validations:
+      required: true
+  - type: textarea
+    id: data_sources
+    attributes:
+      label: Government Data Sources / References
+      description: Are there official state registry portals or RERA circulars that provide this data?
+      placeholder: "e.g. IGRSUP portal or RERA public registration search"
+    validations:
+      required: false

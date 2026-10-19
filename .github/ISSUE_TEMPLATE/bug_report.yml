@@ -1,0 +1,54 @@
+name: 🐛 Bug Report / Statutory Data Discrepancy
+description: Report an issue, incorrect formula, or calculation bug on the platform.
+title: "[BUG]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping keep **R4Realty - Ghar Margdarshan Foundation** accurate and reliable!
+  - type: dropdown
+    id: category
+    attributes:
+      label: Issue Category
+      description: What area of the platform does this issue relate to?
+      options:
+        - "Property Deal Analyzer / Risk Scorer"
+        - "Stamp Duty & Registration Calculator"
+        - "EMI / Amortization / Prepayment Calculator"
+        - "PMAY-Urban 2.0 Estimator"
+        - "Scam Watchdog & RERA Directory"
+        - "SQLite Micro-API / Data Desk"
+        - "Mobile Responsive UI / Layout"
+        - "Other"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem Description
+      description: Clear and concise description of the bug or calculation error.
+      placeholder: "e.g. When calculating stamp duty for Maharashtra with female ownership, the rebate was calculated incorrectly..."
+    validations:
+      required: true
+  - type: input
+    id: statutory_source
+    attributes:
+      label: Official Source / Notification (if legal or tax discrepancy)
+      description: Link or gazette order citing the correct statutory formula.
+      placeholder: "e.g. Maharashtra Revenue & Forest Dept Notification No. ..."
+    validations:
+      required: false
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device & Browser
+      options:
+        - "Mobile - Chrome (Android)"
+        - "Mobile - Safari (iOS)"
+        - "Tablet / iPad"
+        - "Desktop - Chrome / Edge"
+        - "Desktop - Firefox"
+        - "Desktop - Safari (macOS)"
+    validations:
+      required: true
