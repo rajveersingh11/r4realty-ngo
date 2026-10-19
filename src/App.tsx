@@ -95,7 +95,7 @@ export const App: React.FC = () => {
               <b>Public Beta Preview:</b> This platform is currently being built and refined for official launch. Features, algorithms & state data are updated daily.
             </span>
             <a 
-              href="https://wa.me/919876543210?text=Hi%20Ghar%20Margdarshan%2C%20I%20have%20feedback%20on%20the%20beta%20platform."
+              href="https://wa.me/917014865202?text=Hi%20Ghar%20Margdarshan%2C%20I%20have%20feedback%20on%20the%20beta%20platform."
               target="_blank"
               rel="noopener noreferrer"
               className="underline font-bold hover:text-amber-100 text-[11px] sm:text-xs ml-1"
@@ -138,7 +138,7 @@ export const App: React.FC = () => {
       {/* Floating Citizen WhatsApp Button (with mobile safe offset) */}
       <a
         id="floating-whatsapp"
-        href="https://wa.me/919876543210?text=Hello%20Ghar%20Margdarshan%2C%20I%20have%20a%20property%20question."
+        href="https://wa.me/917014865202?text=Hello%20Ghar%20Margdarshan%2C%20I%20have%20a%20property%20question."
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Free WhatsApp Property Advisory"

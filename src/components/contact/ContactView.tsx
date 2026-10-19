@@ -53,7 +53,7 @@ export const ContactView: React.FC = () => {
 
             <div className="space-y-4">
               <a
-                href="https://wa.me/919876543210?text=Hello%20Ghar%20Margdarshan%2C%20I%20have%20a%20property%20question."
+                href="https://wa.me/917014865202?text=Hello%20Ghar%20Margdarshan%2C%20I%20have%20a%20property%20question."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 flex items-center gap-3.5 hover:opacity-95 transition-all group"
@@ -63,7 +63,7 @@ export const ContactView: React.FC = () => {
                 </div>
                 <div>
                   <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300 block">Instant WhatsApp Advisory</span>
-                  <span className="text-sm font-bold text-foundation-text group-hover:underline">+91 98765 43210</span>
+                  <span className="text-sm font-bold text-foundation-text group-hover:underline">+91 70148 65202</span>
                 </div>
               </a>
 
@@ -133,7 +133,7 @@ export const ContactView: React.FC = () => {
                   </span>
                 </div>
                 <a
-                  href={`https://wa.me/919876543210?text=${encodeURIComponent(`Hello Ghar Margdarshan Team, I submitted inquiry ticket [${submissionResult.ticketId}] regarding: ${topic}. My name is ${name}.`)}`}
+                  href={`https://wa.me/917014865202?text=${encodeURIComponent(`Hello Ghar Margdarshan Team, I submitted inquiry ticket [${submissionResult.ticketId}] regarding: ${topic}. My name is ${name}.`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition"

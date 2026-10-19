@@ -367,7 +367,7 @@ export const ScamWatchdog: React.FC = () => {
                 </span>
               </div>
               <a
-                href={`https://wa.me/919876543210?text=${encodeURIComponent(`Hello Ghar Margdarshan Team, I submitted scam report [${submissionResult.referenceId}] regarding ${reportBuilder} in ${reportCity}.`)}`}
+                href={`https://wa.me/917014865202?text=${encodeURIComponent(`Hello Ghar Margdarshan Team, I submitted scam report [${submissionResult.referenceId}] regarding ${reportBuilder} in ${reportCity}.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition"

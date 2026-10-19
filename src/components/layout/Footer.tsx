@@ -54,7 +54,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenNgoDesk }) =>
             <h4 className="font-bold text-foundation-text text-sm uppercase tracking-wider">Free Citizen Helpline</h4>
             <div className="space-y-2 text-xs sm:text-sm">
               <a 
-                href="https://wa.me/919876543210?text=Hello%20Ghar%20Margdarshan%2C%20I%20have%20a%20property%20question."
+                href="https://wa.me/917014865202?text=Hello%20Ghar%20Margdarshan%2C%20I%20have%20a%20property%20question."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-semibold hover:underline"

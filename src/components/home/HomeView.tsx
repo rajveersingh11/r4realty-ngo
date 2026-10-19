@@ -259,7 +259,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onSelectTab, onOpenSearch })
 
           <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
             <a
-              href="https://wa.me/919876543210?text=Hello%20Ghar%20Margdarshan%2C%20I%20have%20a%20property%20question."
+              href="https://wa.me/917014865202?text=Hello%20Ghar%20Margdarshan%2C%20I%20have%20a%20property%20question."
               target="_blank"
               rel="noopener noreferrer"
               className="px-6 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm flex items-center gap-2 shadow-lg transition-transform active:scale-95"
