@@ -1,3 +1,17 @@
 name = "r4realty-ngo"
-pages_build_output_dir = "./dist"
 compatibility_date = "2026-10-19"
+pages_build_output_dir = "./dist"
+
+[assets]
+directory = "./dist"
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+invocation_logs = true
+persist = true
+
+[observability.traces]
+enabled = false
+head_sampling_rate = 1
+persist = true
