@@ -77,6 +77,30 @@ npm run preview
 
 ---
 
+## Deploying on Cloudflare Pages
+
+### Option 1: Cloudflare Git Integration (Recommended)
+1. Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/) and navigate to **Workers & Pages > Create application > Pages > Connect to Git**.
+2. Select repository: `rajveersingh11/r4realty-ngo`.
+3. Set the following build settings:
+   - **Framework preset**: `Vite`
+   - **Build command**: `npm run build`
+   - **Build output directory**: `dist`
+   - **Environment variables**: Add `NODE_VERSION` = `22`
+4. Click **Save and Deploy**. Cloudflare will automatically build and distribute the app across its global edge network!
+
+### Option 2: Wrangler CLI Deployment
+```bash
+npm run deploy:cf
+```
+
+The repository includes pre-configured:
+- `public/_redirects`: SPA client-side routing fallback (`/*  /index.html  200`).
+- `public/_headers`: Cloudflare edge security headers and 1-year asset caching.
+- `wrangler.toml` & `.nvmrc`: Ready-to-go project configuration.
+
+---
+
 ## Featherlight SQLite Data Collection
 
 The platform includes an ultra-lightweight data collection engine built using Node.js's native `node:sqlite` module (zero external backend dependencies):
