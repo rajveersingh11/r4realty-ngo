@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Navbar } from './components/layout/Navbar';
 import { BottomNav } from './components/layout/BottomNav';
 import { Footer } from './components/layout/Footer';
 import { SearchModal } from './components/layout/SearchModal';
 import { HomeView } from './components/home/HomeView';
-import { MarketAnalyticsHub } from './components/analytics/MarketAnalyticsHub';
-import { CalculatorHub } from './components/calculators/CalculatorHub';
-import { GuidesView } from './components/guides/GuidesView';
-import { ScamWatchdog } from './components/protect/ScamWatchdog';
-import { CommunityView } from './components/community/CommunityView';
-import { AboutView } from './components/about/AboutView';
-import { ContactView } from './components/contact/ContactView';
-import { LegalView } from './components/legal/LegalView';
-import { NgoDataDesk } from './components/admin/NgoDataDesk';
 import { MessageSquare, AlertCircle, X } from 'lucide-react';
+
+// Lazy-loaded route views for optimal bundle splitting and performance
+const MarketAnalyticsHub = lazy(() => import('./components/analytics/MarketAnalyticsHub').then(m => ({ default: m.MarketAnalyticsHub })));
+const CalculatorHub = lazy(() => import('./components/calculators/CalculatorHub').then(m => ({ default: m.CalculatorHub })));
+const GuidesView = lazy(() => import('./components/guides/GuidesView').then(m => ({ default: m.GuidesView })));
+const ScamWatchdog = lazy(() => import('./components/protect/ScamWatchdog').then(m => ({ default: m.ScamWatchdog })));
+const CommunityView = lazy(() => import('./components/community/CommunityView').then(m => ({ default: m.CommunityView })));
+const AboutView = lazy(() => import('./components/about/AboutView').then(m => ({ default: m.AboutView })));
+const ContactView = lazy(() => import('./components/contact/ContactView').then(m => ({ default: m.ContactView })));
+const LegalView = lazy(() => import('./components/legal/LegalView').then(m => ({ default: m.LegalView })));
+const NgoDataDesk = lazy(() => import('./components/admin/NgoDataDesk').then(m => ({ default: m.NgoDataDesk })));
 
 const ROUTE_PATHS: Record<string, string> = {
   home: '/',
@@ -39,8 +41,57 @@ const LEGACY_HASH_MAP: Record<string, string> = {
   legal: '/legal'
 };
 
+const PAGE_METADATA: Record<string, { title: string; desc: string }> = {
+  home: {
+    title: 'R4Realty - Ghar Margdarshan Foundation | Independent Real Estate Guidance',
+    desc: '100% free, commission-free guidance for Indian homebuyers, families, and new investors.'
+  },
+  analytics: {
+    title: 'Real Estate Deal Analyzer & City Market Trends | Ghar Margdarshan',
+    desc: 'Independent property due diligence, fair value benchmark corridors, and micro-market rental yields.'
+  },
+  calculators: {
+    title: 'Commission-Free Real Estate Calculators | EMI, Stamp Duty & Affordability',
+    desc: 'Free, transparent financial calculators with zero sales pitches or hidden fees.'
+  },
+  guides: {
+    title: 'First-Time Homebuyer Blueprint & Legal Glossary | Ghar Margdarshan',
+    desc: 'Step-by-step checklists, 30-year title diligence, and possession snagging inspection guides.'
+  },
+  protect: {
+    title: 'Real Estate Scam Watchdog & RERA Complaint Directory | Ghar Margdarshan',
+    desc: 'Diagnose builder red flags, check state RERA portals, and report fraudulent schemes.'
+  },
+  community: {
+    title: 'Citizen Masterclasses & Pro-Bono Volunteers | Ghar Margdarshan',
+    desc: 'Free real estate literacy masterclasses and verified citizen advocacy network.'
+  },
+  about: {
+    title: 'About Our Non-Profit Charter & Ethical Mission | Ghar Margdarshan',
+    desc: 'Our charter: 0% commissions, zero broker kickbacks, and 100% DPDP privacy compliance.'
+  },
+  contact: {
+    title: 'Free WhatsApp Helpline & Citizen Consultation | Ghar Margdarshan',
+    desc: 'Connect with verified non-profit real estate volunteers for unbiased advisory.'
+  },
+  legal: {
+    title: 'DPDP Privacy Policy, Statutory Disclaimers & Terms | Ghar Margdarshan',
+    desc: 'Compliant with the Digital Personal Data Protection Act 2023 and RERA 2016.'
+  }
+};
+
+function getAppBasePath(): string {
+  if (typeof window === 'undefined') return '';
+  return window.location.pathname.startsWith('/r4realty-ngo') ? '/r4realty-ngo' : '';
+}
+
 function resolveTabFromUrl(pathname = window.location.pathname, hash = window.location.hash) {
-  const normalizedPath = pathname.replace(/^\/+|\/+$/g, '');
+  const basePath = getAppBasePath();
+  let relativePath = pathname;
+  if (basePath && relativePath.startsWith(basePath)) {
+    relativePath = relativePath.slice(basePath.length);
+  }
+  const normalizedPath = relativePath.replace(/^\/+|\/+$/g, '');
   const legacyHash = hash.replace(/^#\/?/, '').trim();
 
   if (legacyHash && LEGACY_HASH_MAP[legacyHash]) {
@@ -54,6 +105,18 @@ function resolveTabFromUrl(pathname = window.location.pathname, hash = window.lo
   const tab = Object.entries(ROUTE_PATHS).find(([, routePath]) => routePath === `/${normalizedPath}`)?.[0];
   return tab || 'home';
 }
+
+const ViewSkeleton: React.FC = () => (
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-6 animate-pulse">
+    <div className="h-8 bg-foundation-border/40 rounded-xl w-1/3"></div>
+    <div className="h-4 bg-foundation-border/30 rounded-lg w-2/3"></div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
+      <div className="h-48 bg-foundation-surface border border-foundation-border/50 rounded-2xl"></div>
+      <div className="h-48 bg-foundation-surface border border-foundation-border/50 rounded-2xl"></div>
+      <div className="h-48 bg-foundation-surface border border-foundation-border/50 rounded-2xl"></div>
+    </div>
+  </div>
+);
 
 export const App: React.FC = () => {
   const [isNgoDeskOpen, setIsNgoDeskOpen] = useState(false);
@@ -85,6 +148,24 @@ export const App: React.FC = () => {
     }
   }, [isDark]);
 
+  // Dynamically update document title and description for SEO and browser history
+  useEffect(() => {
+    const meta = PAGE_METADATA[currentTab] || PAGE_METADATA.home;
+    document.title = meta.title;
+    const descEl = document.querySelector('meta[name="description"]');
+    if (descEl) {
+      descEl.setAttribute('content', meta.desc);
+    }
+    const ogTitleEl = document.querySelector('meta[property="og:title"]');
+    if (ogTitleEl) {
+      ogTitleEl.setAttribute('content', meta.title);
+    }
+    const ogDescEl = document.querySelector('meta[property="og:description"]');
+    if (ogDescEl) {
+      ogDescEl.setAttribute('content', meta.desc);
+    }
+  }, [currentTab]);
+
   // Sync navigation state with browser path history
   useEffect(() => {
     const handleLocationChange = () => {
@@ -95,8 +176,10 @@ export const App: React.FC = () => {
     const handleHashFallback = () => {
       const legacyHash = window.location.hash.replace(/^#\/?/, '').trim();
       if (legacyHash && LEGACY_HASH_MAP[legacyHash]) {
-        const nextPath = LEGACY_HASH_MAP[legacyHash];
-        window.history.replaceState({}, '', nextPath);
+        const basePath = getAppBasePath();
+        const routeSuffix = LEGACY_HASH_MAP[legacyHash];
+        const fullPath = routeSuffix === '/' ? (basePath || '/') : `${basePath}${routeSuffix}`;
+        window.history.replaceState({}, '', fullPath);
         setCurrentTab(legacyHash);
       }
     };
@@ -115,12 +198,14 @@ export const App: React.FC = () => {
 
   const handleSelectTab = (tabId: string) => {
     const nextTab = tabId || 'home';
-    const nextPath = ROUTE_PATHS[nextTab] || '/';
+    const basePath = getAppBasePath();
+    const routeSuffix = ROUTE_PATHS[nextTab] || '/';
+    const fullPath = routeSuffix === '/' ? (basePath || '/') : `${basePath}${routeSuffix}`;
     setCurrentTab(nextTab);
-    if (window.location.pathname !== nextPath) {
-      window.history.pushState({}, '', nextPath);
+    if (window.location.pathname !== fullPath) {
+      window.history.pushState({}, '', fullPath);
     } else {
-      window.history.replaceState({}, '', nextPath);
+      window.history.replaceState({}, '', fullPath);
     }
   };
 
@@ -184,14 +269,16 @@ export const App: React.FC = () => {
       {/* Main Page Content */}
       <main className="flex-1">
         {currentTab === 'home' && <HomeView onSelectTab={handleSelectTab} onOpenSearch={() => setIsSearchOpen(true)} />}
-        {currentTab === 'analytics' && <MarketAnalyticsHub />}
-        {currentTab === 'calculators' && <CalculatorHub />}
-        {currentTab === 'guides' && <GuidesView />}
-        {currentTab === 'protect' && <ScamWatchdog />}
-        {currentTab === 'community' && <CommunityView />}
-        {currentTab === 'about' && <AboutView />}
-        {currentTab === 'contact' && <ContactView />}
-        {currentTab === 'legal' && <LegalView />}
+        <Suspense fallback={<ViewSkeleton />}>
+          {currentTab === 'analytics' && <MarketAnalyticsHub />}
+          {currentTab === 'calculators' && <CalculatorHub />}
+          {currentTab === 'guides' && <GuidesView />}
+          {currentTab === 'protect' && <ScamWatchdog />}
+          {currentTab === 'community' && <CommunityView />}
+          {currentTab === 'about' && <AboutView />}
+          {currentTab === 'contact' && <ContactView />}
+          {currentTab === 'legal' && <LegalView />}
+        </Suspense>
       </main>
 
       {/* Floating Citizen WhatsApp Button (with mobile safe offset) */}
@@ -227,10 +314,14 @@ export const App: React.FC = () => {
       />
 
       {/* NGO SQLite Data Desk Modal */}
-      <NgoDataDesk
-        isOpen={isNgoDeskOpen}
-        onClose={() => setIsNgoDeskOpen(false)}
-      />
+      {isNgoDeskOpen && (
+        <Suspense fallback={null}>
+          <NgoDataDesk
+            isOpen={isNgoDeskOpen}
+            onClose={() => setIsNgoDeskOpen(false)}
+          />
+        </Suspense>
+      )}
     </div>
   );
 };
