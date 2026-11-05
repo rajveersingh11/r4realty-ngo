@@ -125,8 +125,8 @@ export const NgoDataDesk: React.FC<NgoDataDeskProps> = ({ isOpen, onClose }) => 
         {/* Database Status Strip & Export Actions */}
         <div className="px-4 sm:px-6 py-2.5 bg-slate-100 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-4 text-slate-600 dark:text-slate-300">
-            <span><strong>Database File:</strong> <code className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono">data/r4realty.db</code></span>
-            <span><strong>Engine:</strong> Native Node.js <code className="font-mono">node:sqlite</code></span>
+            <span><strong>Target:</strong> <code className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono">{serverStatus.info?.path || 'data/r4realty.db'}</code></span>
+            <span><strong>Engine:</strong> <code className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono">{serverStatus.info?.database || (serverStatus.online ? 'Native Node.js node:sqlite' : 'SQLite (Offline / Browser)')}</code></span>
           </div>
 
           <div className="flex items-center gap-2">

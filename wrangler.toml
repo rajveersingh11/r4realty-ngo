@@ -6,6 +6,12 @@ directory = "./dist"
 not_found_handling = "single-page-application"
 html_handling = "auto-trailing-slash"
 
+[[d1_databases]]
+binding = "DB"
+database_name = "r4realty-db"
+database_id = "local-r4realty-db"
+migrations_dir = "migrations"
+
 [observability.logs]
 enabled = true
 head_sampling_rate = 1
