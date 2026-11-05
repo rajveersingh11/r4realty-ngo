@@ -83,7 +83,7 @@ export const ContactView: React.FC = () => {
                 </div>
                 <div>
                   <span className="text-xs font-bold text-foundation-muted block">Official Email</span>
-                  <span className="text-sm font-bold text-foundation-text">guidance@gharmargdarshan.org</span>
+                  <span className="text-sm font-bold text-foundation-text">guidance@r4realty.in</span>
                 </div>
               </div>
 

@@ -7,5 +7,5 @@ Disallow: /api/
 Disallow: /admin/
 
 # Canonical site map
-Sitemap: https://gharmargdarshan.org/sitemap.xml
+Sitemap: https://r4realty.in/sitemap.xml
 Sitemap: https://rajveersingh11.github.io/r4realty-ngo/sitemap.xml

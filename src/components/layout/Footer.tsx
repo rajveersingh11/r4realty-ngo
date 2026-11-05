@@ -67,7 +67,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenNgoDesk }) =>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-foundation-primary" />
-                <span>guidance@gharmargdarshan.org</span>
+                <span>guidance@r4realty.in</span>
               </div>
             </div>
             <p className="text-[11px] text-foundation-muted pt-2">
