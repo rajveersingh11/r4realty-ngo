@@ -38,31 +38,35 @@ export const MarketAnalyticsHub: React.FC = () => {
         </p>
       </div>
 
-      {/* Sub-Navigation Pill Bar */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-foundation-border">
-        {subTabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeSubTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveSubTab(tab.id as any)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${
-                isActive
-                  ? 'bg-foundation-primary text-foundation-onPrimary shadow-sm'
-                  : 'text-foundation-text hover:bg-foundation-bg hover:text-foundation-primary'
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              <span>{tab.label}</span>
-              {tab.badge && (
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-foundation-accent text-slate-900 ml-1">
-                  {tab.badge}
-                </span>
-              )}
-            </button>
-          );
-        })}
+      {/* Sub-Navigation Pill Bar with Mobile Scroll Fade */}
+      <div className="relative">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-foundation-border">
+          {subTabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeSubTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveSubTab(tab.id as any)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${
+                  isActive
+                    ? 'bg-foundation-primary text-foundation-onPrimary shadow-sm'
+                    : 'text-foundation-text hover:bg-foundation-bg hover:text-foundation-primary'
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                <span>{tab.label}</span>
+                {tab.badge && (
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-foundation-accent text-slate-900 ml-1">
+                    {tab.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+        {/* Soft edge fade for mobile indicating more tabs offscreen */}
+        <div className="pointer-events-none absolute right-0 top-0 bottom-2 w-8 bg-gradient-to-l from-foundation-bg to-transparent sm:hidden" />
       </div>
 
       {/* Sub-Tab Content Rendering */}

@@ -125,6 +125,31 @@ export const EmiCalculator: React.FC = () => {
               <span>₹1 Crore</span>
               <span>₹3 Crore</span>
             </div>
+            {/* Quick Loan Amount Presets */}
+            <div className="flex flex-wrap items-center gap-1.5 mt-2.5">
+              <span className="text-[10px] font-semibold text-foundation-muted">Quick Loan:</span>
+              {[
+                { label: '₹25L', val: 2500000 },
+                { label: '₹50L', val: 5000000 },
+                { label: '₹75L', val: 7500000 },
+                { label: '₹1 Cr', val: 10000000 },
+                { label: '₹1.5 Cr', val: 15000000 },
+                { label: '₹2 Cr', val: 20000000 }
+              ].map((p) => (
+                <button
+                  key={p.val}
+                  type="button"
+                  onClick={() => setLoanAmount(p.val)}
+                  className={`px-2 py-0.5 rounded-md text-[11px] font-medium transition-colors ${
+                    loanAmount === p.val
+                      ? 'bg-foundation-primary text-foundation-onPrimary font-bold shadow-xs'
+                      : 'bg-foundation-bg border border-foundation-border text-foundation-text hover:border-foundation-primary'
+                  }`}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Interest Rate */}

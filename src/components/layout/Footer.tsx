@@ -1,5 +1,6 @@
 import React from 'react';
 import { Building2, Shield, HeartHandshake, Phone, Mail, MessageSquare } from 'lucide-react';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface FooterProps {
   onSelectTab: (tabId: string) => void;
@@ -7,6 +8,7 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenNgoDesk }) => {
+  const { t } = useLanguage();
   return (
     <footer className="bg-foundation-surface border-t border-foundation-border mt-16 pt-12 pb-24 md:pb-12 text-sm text-foundation-muted">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -28,7 +30,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenNgoDesk }) =>
             </p>
             <div className="flex flex-wrap gap-2 pt-2">
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-                <Shield className="w-3.5 h-3.5" /> 100% Commission Free
+                <Shield className="w-3.5 h-3.5" /> {t('nav.commission_free', '100% Commission Free')}
               </span>
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
                 <HeartHandshake className="w-3.5 h-3.5" /> Non-Profit Organization

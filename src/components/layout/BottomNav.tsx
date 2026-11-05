@@ -1,5 +1,6 @@
 import React from 'react';
 import { Building2, TrendingUp, Calculator, ShieldCheck, BookOpen } from 'lucide-react';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface BottomNavProps {
   currentTab: string;
@@ -7,12 +8,14 @@ interface BottomNavProps {
 }
 
 export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab }) => {
+  const { t } = useLanguage();
+
   const items = [
-    { id: 'home', label: 'Home', icon: Building2 },
-    { id: 'analytics', label: 'Analytics', icon: TrendingUp },
-    { id: 'calculators', label: 'Calculators', icon: Calculator },
-    { id: 'protect', label: 'Watchdog', icon: ShieldCheck },
-    { id: 'guides', label: 'Guides', icon: BookOpen },
+    { id: 'home', label: t('nav.home', 'Home'), icon: Building2 },
+    { id: 'analytics', label: t('nav.analytics', 'Analytics'), icon: TrendingUp },
+    { id: 'calculators', label: t('nav.calculators', 'Calculators'), icon: Calculator },
+    { id: 'protect', label: t('nav.protect', 'Watchdog'), icon: ShieldCheck },
+    { id: 'guides', label: t('nav.guides', 'Guides'), icon: BookOpen },
   ];
 
   return (

@@ -12,8 +12,10 @@ import {
   BookOpen, 
   Users, 
   HelpCircle,
-  PhoneCall
+  PhoneCall,
+  Globe
 } from 'lucide-react';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface NavbarProps {
   currentTab: string;
@@ -31,15 +33,16 @@ export const Navbar: React.FC<NavbarProps> = ({
   onToggleTheme
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { language, toggleLanguage, t } = useLanguage();
 
   const navItems = [
-    { id: 'home', label: 'Home', icon: Building2 },
-    { id: 'analytics', label: 'Market Analytics', icon: TrendingUp, badge: 'Intelligence' },
-    { id: 'calculators', label: 'Free Calculators', icon: Calculator },
-    { id: 'guides', label: 'Guides & Checklists', icon: BookOpen },
-    { id: 'protect', label: 'Scam Watchdog', icon: ShieldCheck, alert: true },
-    { id: 'community', label: 'Community & Events', icon: Users },
-    { id: 'about', label: 'About Us', icon: HelpCircle }
+    { id: 'home', label: t('nav.home', 'Home'), icon: Building2 },
+    { id: 'analytics', label: t('nav.analytics', 'Market Analytics'), icon: TrendingUp, badge: t('nav.badge.intelligence', 'Intelligence') },
+    { id: 'calculators', label: t('nav.calculators', 'Free Calculators'), icon: Calculator },
+    { id: 'guides', label: t('nav.guides', 'Guides & Checklists'), icon: BookOpen },
+    { id: 'protect', label: t('nav.protect', 'Scam Watchdog'), icon: ShieldCheck, alert: true },
+    { id: 'community', label: t('nav.community', 'Community & Events'), icon: Users },
+    { id: 'about', label: t('nav.about', 'About Us'), icon: HelpCircle }
   ];
 
   const handleNavClick = (id: string) => {
@@ -75,7 +78,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     </span>
                   </div>
                   <p className="text-[11px] text-foundation-muted leading-tight font-medium hidden xs:block">
-                    Non-Profit · 100% Free · Independent Real Estate Guidance
+                    {t('nav.charter', 'Non-Profit · 100% Free · Independent Real Estate Guidance')}
                   </p>
                 </div>
               </button>
@@ -124,6 +127,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </kbd>
               </button>
 
+              {/* Vernacular Language Switcher Pill */}
+              <button
+                onClick={toggleLanguage}
+                aria-label="Toggle language between English and Hindi"
+                title={language === 'en' ? 'हिन्दी में बदलें (Switch to Hindi)' : 'Switch to English'}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-foundation-border bg-foundation-bg hover:border-foundation-primary text-xs font-semibold text-foundation-text transition-colors"
+              >
+                <Globe className="w-3.5 h-3.5 text-foundation-primary" />
+                <span className={language === 'en' ? 'text-foundation-primary font-bold' : 'text-foundation-muted'}>EN</span>
+                <span className="text-foundation-border text-[10px]">/</span>
+                <span className={language === 'hi' ? 'text-foundation-primary font-bold' : 'text-foundation-muted'}>हि</span>
+              </button>
+
               {/* Theme Toggle */}
               <button
                 onClick={onToggleTheme}
@@ -139,7 +155,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-foundation-primary text-foundation-onPrimary hover:opacity-90 shadow-sm transition-transform active:scale-95"
               >
                 <PhoneCall className="w-3.5 h-3.5" />
-                <span>Ask Free</span>
+                <span>{t('nav.contact', 'Ask Free')}</span>
               </button>
 
               {/* Mobile Hamburger Button */}
@@ -158,8 +174,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-foundation-border bg-foundation-surface px-4 pt-3 pb-6 space-y-1 shadow-lg animate-in slide-in-from-top duration-200">
             <div className="mb-3 px-2 py-1.5 bg-foundation-bg rounded-lg text-xs text-foundation-muted flex items-center justify-between">
-              <span>R4Realty Non-Profit Initiative</span>
-              <span className="font-semibold text-foundation-primary">100% Commission Free</span>
+              <span>{t('nav.charter', 'R4Realty Non-Profit Initiative')}</span>
+              <span className="font-semibold text-foundation-primary">{t('nav.commission_free', '100% Commission Free')}</span>
             </div>
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -186,13 +202,20 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
               );
             })}
-            <div className="pt-3 border-t border-foundation-border flex gap-2">
+            <div className="pt-3 border-t border-foundation-border flex flex-col gap-2">
+              <button
+                onClick={toggleLanguage}
+                className="w-full py-2.5 px-4 rounded-lg bg-foundation-bg border border-foundation-border text-foundation-text font-semibold text-sm flex items-center justify-center gap-2"
+              >
+                <Globe className="w-4 h-4 text-foundation-primary" />
+                <span>{language === 'en' ? 'हिन्दी में बदलें (Switch to Hindi)' : 'Switch to English'}</span>
+              </button>
               <button
                 onClick={() => handleNavClick('contact')}
                 className="w-full py-2.5 px-4 rounded-lg bg-foundation-primary text-foundation-onPrimary text-center font-semibold text-sm flex items-center justify-center gap-2"
               >
                 <PhoneCall className="w-4 h-4" />
-                <span>Contact Helpline</span>
+                <span>{t('nav.helpline', 'Contact Helpline')}</span>
               </button>
             </div>
           </div>

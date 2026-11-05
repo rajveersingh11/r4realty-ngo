@@ -5,6 +5,7 @@ import { Footer } from './components/layout/Footer';
 import { SearchModal } from './components/layout/SearchModal';
 import { HomeView } from './components/home/HomeView';
 import { MessageSquare, AlertCircle, X } from 'lucide-react';
+import { LanguageProvider } from './i18n/LanguageContext';
 
 // Lazy-loaded route views for optimal bundle splitting and performance
 const MarketAnalyticsHub = lazy(() => import('./components/analytics/MarketAnalyticsHub').then(m => ({ default: m.MarketAnalyticsHub })));
@@ -226,7 +227,8 @@ export const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-foundation-bg text-foundation-text transition-colors duration-200">
+    <LanguageProvider>
+      <div className="min-h-screen flex flex-col bg-foundation-bg text-foundation-text transition-colors duration-200">
       {/* Top Under Development / Public Beta Banner */}
       {showTopBanner && (
         <div className="bg-amber-600 text-white px-4 py-2.5 text-xs sm:text-sm font-semibold flex items-center justify-between shadow-md border-b border-amber-700/60 z-50">
@@ -322,6 +324,7 @@ export const App: React.FC = () => {
           />
         </Suspense>
       )}
-    </div>
+      </div>
+    </LanguageProvider>
   );
 };

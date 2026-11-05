@@ -9,12 +9,13 @@ import {
   HeartHandshake, 
   CheckCircle2, 
   PhoneCall, 
-  MessageSquare,
+  MessageSquare, 
   Sparkles,
   Users,
   ShieldAlert,
   Search
 } from 'lucide-react';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface HomeViewProps {
   onSelectTab: (tabId: string) => void;
@@ -22,6 +23,8 @@ interface HomeViewProps {
 }
 
 export const HomeView: React.FC<HomeViewProps> = ({ onSelectTab, onOpenSearch }) => {
+  const { t } = useLanguage();
+
   return (
     <div className="space-y-16 py-6 sm:py-10">
       {/* Hero Section */}
@@ -30,18 +33,20 @@ export const HomeView: React.FC<HomeViewProps> = ({ onSelectTab, onOpenSearch })
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-foundation-accent/20 border border-foundation-accent/30 text-foundation-text text-xs sm:text-sm font-bold">
             <HeartHandshake className="w-4 h-4 text-foundation-primary" />
-            <span>Non-Profit · 100% Free · Independent Real Estate Guidance</span>
+            <span>{t('hero.badge', 'Non-Profit · 100% Free · Independent Real Estate Guidance')}</span>
           </div>
 
           {/* Heading */}
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold font-serif text-foundation-text tracking-tight leading-[1.1]">
-            Your first home deserves <span className="text-foundation-primary italic underline decoration-foundation-accent">honest advice</span>.
+            {t('hero.title_pre', 'Your first home deserves')}{' '}
+            <span className="text-foundation-primary italic underline decoration-foundation-accent">
+              {t('hero.title_highlight', 'honest advice')}
+            </span>.
           </h1>
 
           {/* Subtitle */}
           <p className="text-base sm:text-xl text-foundation-muted max-w-2xl mx-auto leading-relaxed">
-            Free, commission-free guidance for first-time buyers, families, and investors. 
-            We take no broker commissions or developer kickbacks, so we never have a reason to push a property.
+            {t('hero.subtitle', 'Free, commission-free guidance for first-time buyers, families, and investors. We take no broker commissions or developer kickbacks, so we never have a reason to push a property.')}
           </p>
 
           {/* Action Buttons */}
@@ -51,7 +56,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onSelectTab, onOpenSearch })
               className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-foundation-primary text-foundation-onPrimary text-sm sm:text-base font-bold shadow-md hover:opacity-95 transition-all flex items-center justify-center gap-2 group"
             >
               <TrendingUp className="w-4 h-4 text-foundation-accent transition-transform group-hover:scale-110" />
-              <span>Analyze a Property Deal</span>
+              <span>{t('hero.cta.deal', 'Analyze a Property Deal')}</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </button>
 
@@ -60,7 +65,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onSelectTab, onOpenSearch })
               className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-foundation-surface border border-foundation-border text-foundation-text text-sm sm:text-base font-bold hover:bg-foundation-bg transition-colors flex items-center justify-center gap-2"
             >
               <Calculator className="w-4 h-4 text-foundation-primary" />
-              <span>Explore Calculators</span>
+              <span>{t('hero.cta.calculators', 'Explore Calculators')}</span>
             </button>
 
             <button
@@ -68,7 +73,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onSelectTab, onOpenSearch })
               className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-800 dark:text-rose-300 text-sm sm:text-base font-bold hover:bg-rose-100 transition-colors flex items-center justify-center gap-2"
             >
               <ShieldAlert className="w-4 h-4 text-rose-600" />
-              <span>Scam Watchdog</span>
+              <span>{t('hero.cta.watchdog', 'Scam Watchdog')}</span>
             </button>
           </div>
 
@@ -80,7 +85,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onSelectTab, onOpenSearch })
             >
               <span className="flex items-center gap-2.5">
                 <Search className="w-4 h-4 text-foundation-primary group-hover:scale-110 transition-transform" />
-                <span>Search RERA portals, glossary terms, guides, or city trends...</span>
+                <span>{t('hero.search_placeholder', 'Search RERA portals, glossary terms, guides, or city trends...')}</span>
               </span>
               <kbd className="hidden sm:inline-block px-2 py-0.5 text-[11px] font-bold rounded bg-foundation-bg border border-foundation-border text-foundation-muted">
                 Ctrl K

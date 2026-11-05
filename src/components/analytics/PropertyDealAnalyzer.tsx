@@ -8,7 +8,8 @@ import {
   FileText, 
   Printer, 
   RefreshCcw,
-  BadgeAlert
+  BadgeAlert,
+  Share2
 } from 'lucide-react';
 import { CITIES_DATA, analyzePropertyDeal, DealAnalysisInput } from '../../data/marketAnalytics';
 
@@ -56,6 +57,30 @@ export const PropertyDealAnalyzer: React.FC = () => {
       return `₹${(val / 10000000).toFixed(2)} Cr`;
     }
     return `₹${(val / 100000).toFixed(2)} Lakhs`;
+  };
+
+  const generateWhatsAppShareUrl = () => {
+    const cityName = selectedCity?.name || 'India';
+    const locText = locality ? `${locality}, ${cityName}` : cityName;
+    const valuationBadge =
+      analysis.valuationVerdict === 'Fair Market Corridor'
+        ? '✅ Fair Market Corridor'
+        : analysis.valuationVerdict === 'Significantly Undervalued'
+        ? '🟢 Value Opportunity (Undervalued)'
+        : `⚠️ ${analysis.valuationVerdict} (+${analysis.priceVariancePercent}%)`;
+
+    const text = `🏠 *R4Realty - Ghar Margdarshan Due Diligence Report*
+• *Property:* ${locText}
+• *Quoted Base Price:* ${formatLakhsCr(quotedPrice)} (₹${analysis.pricePerSqFt.toLocaleString('en-IN')}/sq.ft)
+• *Carpet Area:* ${carpetArea} sq.ft
+• *Market Benchmark:* ${valuationBadge}
+• *True Liquid Outlay Required:* ${formatLakhsCr(analysis.estimatedTrueCost.totalTrueOutlay)}
+• *Watchdog Risk Score:* ${analysis.riskScore}/100 (${analysis.riskLevel.toUpperCase()})
+
+🛡️ 100% Free, Non-Profit Real Estate Guidance
+👉 Verify your deal free at: https://r4realty.in/analytics`;
+
+    return `https://wa.me/?text=${encodeURIComponent(text)}`;
   };
 
   return (
@@ -132,6 +157,31 @@ export const PropertyDealAnalyzer: React.FC = () => {
               onChange={(e) => setQuotedPrice(Number(e.target.value))}
               className="w-full px-3 py-2.5 rounded-xl border border-foundation-border bg-foundation-bg text-foundation-text text-sm focus:ring-2 focus:ring-foundation-primary focus:outline-none"
             />
+            {/* Indian Numbering Quick Presets */}
+            <div className="flex flex-wrap items-center gap-1.5 mt-2">
+              <span className="text-[10px] font-semibold text-foundation-muted">Quick Presets:</span>
+              {[
+                { label: '₹40L', val: 4000000 },
+                { label: '₹60L', val: 6000000 },
+                { label: '₹85L', val: 8500000 },
+                { label: '₹1.2 Cr', val: 12000000 },
+                { label: '₹2 Cr', val: 20000000 },
+                { label: '₹3 Cr', val: 30000000 }
+              ].map((p) => (
+                <button
+                  key={p.val}
+                  type="button"
+                  onClick={() => setQuotedPrice(p.val)}
+                  className={`px-2 py-0.5 rounded-md text-[11px] font-medium transition-colors ${
+                    quotedPrice === p.val
+                      ? 'bg-foundation-primary text-foundation-onPrimary font-bold shadow-xs'
+                      : 'bg-foundation-bg border border-foundation-border text-foundation-text hover:border-foundation-primary'
+                  }`}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Carpet Area */}
@@ -149,7 +199,30 @@ export const PropertyDealAnalyzer: React.FC = () => {
               placeholder="e.g. 850"
               className="w-full px-3 py-2.5 rounded-xl border border-foundation-border bg-foundation-bg text-foundation-text text-sm focus:ring-2 focus:ring-foundation-primary focus:outline-none"
             />
-            <p className="text-[11px] text-foundation-muted mt-1">
+            {/* BHK Carpet Area Quick Presets */}
+            <div className="flex flex-wrap items-center gap-1.5 mt-2">
+              <span className="text-[10px] font-semibold text-foundation-muted">BHK Presets:</span>
+              {[
+                { label: '1 BHK (~550 sqft)', val: 550 },
+                { label: '2 BHK (~850 sqft)', val: 850 },
+                { label: '3 BHK (~1300 sqft)', val: 1300 },
+                { label: '4 BHK (~2000 sqft)', val: 2000 }
+              ].map((b) => (
+                <button
+                  key={b.val}
+                  type="button"
+                  onClick={() => setCarpetArea(b.val)}
+                  className={`px-2 py-0.5 rounded-md text-[11px] font-medium transition-colors ${
+                    carpetArea === b.val
+                      ? 'bg-foundation-primary text-foundation-onPrimary font-bold shadow-xs'
+                      : 'bg-foundation-bg border border-foundation-border text-foundation-text hover:border-foundation-primary'
+                  }`}
+                >
+                  {b.label}
+                </button>
+              ))}
+            </div>
+            <p className="text-[11px] text-foundation-muted mt-2">
               Quoted rate: <b className="text-foundation-text">₹{analysis.pricePerSqFt.toLocaleString('en-IN')}/sq.ft</b>
             </p>
           </div>
@@ -417,17 +490,29 @@ export const PropertyDealAnalyzer: React.FC = () => {
             </div>
           </div>
 
-          {/* Actionable Next Steps & Print Button */}
+          {/* Actionable Next Steps & WhatsApp Share / Print Button */}
           <div className="bg-foundation-surface p-6 rounded-2xl border border-foundation-border shadow-sm space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2.5">
               <h4 className="font-bold text-foundation-text text-base">Recommended Action Checklist</h4>
-              <button
-                onClick={() => window.print()}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-foundation-bg border border-foundation-border hover:border-foundation-primary text-foundation-text transition-colors"
-              >
-                <Printer className="w-3.5 h-3.5" />
-                <span>Print Due Diligence Report</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <a
+                  href={generateWhatsAppShareUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors"
+                  title="Share this property due diligence summary on WhatsApp"
+                >
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>Share on WhatsApp</span>
+                </a>
+                <button
+                  onClick={() => window.print()}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-foundation-bg border border-foundation-border hover:border-foundation-primary text-foundation-text transition-colors"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>Print Report</span>
+                </button>
+              </div>
             </div>
 
             <div className="space-y-2">
