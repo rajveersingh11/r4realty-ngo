@@ -10,6 +10,12 @@ const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 3001;
 const DATA_DIR = path.join(__dirname, 'data');
 const DB_PATH = path.join(DATA_DIR, 'r4realty.db');
+const ADMIN_USERNAME = process.env.R4REALTY_ADMIN_USERNAME || 'r4realty-admin';
+const ADMIN_PASSWORD = process.env.R4REALTY_ADMIN_PASSWORD || 'foundation-ngo-local';
+const ADMIN_TOKEN = process.env.R4REALTY_ADMIN_TOKEN || 'r4realty-admin-token-local';
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const RATE_LIMIT_MAX_REQUESTS = 20;
+const rateLimits = new Map();
 
 // Ensure data directory exists
 if (!fs.existsSync(DATA_DIR)) {
@@ -129,9 +135,78 @@ function sendJson(res, statusCode, data) {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PATCH, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Admin-Token'
   });
   res.end(JSON.stringify(data));
+}
+
+function sanitizeText(value) {
+  if (value == null) return '';
+  return String(value)
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function getClientIp(req) {
+  const forwarded = req.headers['x-forwarded-for'];
+  if (typeof forwarded === 'string' && forwarded.length > 0) {
+    return forwarded.split(',')[0].trim();
+  }
+  const realIp = req.headers['x-real-ip'];
+  if (typeof realIp === 'string' && realIp.length > 0) return realIp.trim();
+  return req.socket?.remoteAddress || 'unknown';
+}
+
+function enforceRateLimit(req, res) {
+  const clientIp = getClientIp(req);
+  const now = Date.now();
+  const existing = rateLimits.get(clientIp) || { count: 0, resetAt: now + RATE_LIMIT_WINDOW_MS };
+
+  if (now > existing.resetAt) {
+    rateLimits.set(clientIp, { count: 0, resetAt: now + RATE_LIMIT_WINDOW_MS });
+  }
+
+  const bucket = rateLimits.get(clientIp) || { count: 0, resetAt: now + RATE_LIMIT_WINDOW_MS };
+  bucket.count += 1;
+  rateLimits.set(clientIp, bucket);
+
+  if (bucket.count > RATE_LIMIT_MAX_REQUESTS) {
+    sendJson(res, 429, {
+      success: false,
+      error: 'Rate limit exceeded. Please wait a moment before trying again.'
+    });
+    return true;
+  }
+
+  return false;
+}
+
+function isValidAdminAuth(req, url) {
+  const tokenHeader = req.headers['x-admin-token'];
+  if (tokenHeader && String(tokenHeader) === ADMIN_TOKEN) {
+    return true;
+  }
+
+  const queryToken = url.searchParams.get('token') || url.searchParams.get('auth');
+  if (queryToken && queryToken === ADMIN_TOKEN) {
+    return true;
+  }
+
+  const bearerHeader = req.headers.authorization;
+  if (typeof bearerHeader === 'string' && bearerHeader.startsWith('Bearer ')) {
+    return bearerHeader.slice('Bearer '.length).trim() === ADMIN_TOKEN;
+  }
+
+  if (typeof bearerHeader === 'string' && bearerHeader.startsWith('Basic ')) {
+    const encoded = bearerHeader.slice('Basic '.length).trim();
+    const decoded = Buffer.from(encoded, 'base64').toString('utf8');
+    const [username, password] = decoded.split(':');
+    return username === ADMIN_USERNAME && password === ADMIN_PASSWORD;
+  }
+
+  return false;
 }
 
 function parseJsonBody(req) {
@@ -178,6 +253,25 @@ const server = http.createServer(async (req, res) => {
   const pathname = url.pathname;
 
   try {
+    if (pathname.startsWith('/api/admin/')) {
+      if (!isValidAdminAuth(req, url)) {
+        return sendJson(res, 401, {
+          success: false,
+          error: 'Administrative access denied. Provide valid admin credentials.'
+        });
+      }
+    }
+
+    if (
+      pathname === '/api/scam-reports' ||
+      pathname === '/api/inquiries' ||
+      pathname === '/api/event-registrations' ||
+      pathname === '/api/volunteers'
+    ) {
+      if (enforceRateLimit(req, res)) {
+        return;
+      }
+    }
     // 1. Health & Database Overview
     if (pathname === '/api/health' && req.method === 'GET') {
       const scamCount = db.prepare('SELECT COUNT(*) as count FROM scam_reports').get().count;
@@ -223,19 +317,31 @@ const server = http.createServer(async (req, res) => {
       }
 
       const refId = generateId('SR');
+      const city = sanitizeText(body.city);
+      const builderName = sanitizeText(body.builderName);
+      const projectName = sanitizeText(body.projectName || '');
+      const category = sanitizeText(body.category);
+      const description = sanitizeText(body.description);
+      const approxLoss = sanitizeText(body.approxLoss || '');
+      const contactInfo = sanitizeText(body.contactInfo || 'anonymous');
+
+      if (!city || !builderName || !category || !description) {
+        return sendJson(res, 400, { success: false, error: 'Invalid form values were provided.' });
+      }
+
       const insert = db.prepare(`
         INSERT INTO scam_reports (reference_id, city, builder_name, project_name, scam_category, description, approx_loss_or_exposure, contact_info, status)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending_review')
       `);
       insert.run(
         refId,
-        body.city.trim(),
-        body.builderName.trim(),
-        (body.projectName || '').trim(),
-        body.category,
-        body.description.trim(),
-        (body.approxLoss || '').trim(),
-        (body.contactInfo || 'anonymous').trim()
+        city,
+        builderName,
+        projectName,
+        category,
+        description,
+        approxLoss,
+        contactInfo
       );
 
       return sendJson(res, 201, {
@@ -253,18 +359,29 @@ const server = http.createServer(async (req, res) => {
       }
 
       const ticketId = generateId('TKT');
+      const name = sanitizeText(body.name);
+      const contactMode = sanitizeText(body.contactMode || 'whatsapp');
+      const contactValue = sanitizeText(body.contactValue);
+      const city = sanitizeText(body.city || 'Pan-India');
+      const topic = sanitizeText(body.topic);
+      const message = sanitizeText(body.message);
+
+      if (!name || !contactValue || !topic || !message) {
+        return sendJson(res, 400, { success: false, error: 'Invalid inquiry values were provided.' });
+      }
+
       const insert = db.prepare(`
         INSERT INTO citizen_inquiries (ticket_id, full_name, contact_mode, contact_value, city, topic, message, status)
         VALUES (?, ?, ?, ?, ?, ?, ?, 'open')
       `);
       insert.run(
         ticketId,
-        body.name.trim(),
-        body.contactMode || 'whatsapp',
-        body.contactValue.trim(),
-        (body.city || 'Pan-India').trim(),
-        body.topic,
-        body.message.trim()
+        name,
+        contactMode,
+        contactValue,
+        city,
+        topic,
+        message
       );
 
       return sendJson(res, 201, {
@@ -282,18 +399,29 @@ const server = http.createServer(async (req, res) => {
       }
 
       const regId = generateId('REG');
+      const eventId = sanitizeText(body.eventId);
+      const eventTitle = sanitizeText(body.eventTitle || 'Community Real Estate Masterclass');
+      const name = sanitizeText(body.name);
+      const email = sanitizeText(body.email);
+      const phone = sanitizeText(body.phone || '');
+      const city = sanitizeText(body.city || 'Pan-India');
+
+      if (!eventId || !name || !email) {
+        return sendJson(res, 400, { success: false, error: 'Invalid registration details were provided.' });
+      }
+
       const insert = db.prepare(`
         INSERT INTO event_registrations (registration_id, event_id, event_title, attendee_name, attendee_email, attendee_phone, city)
         VALUES (?, ?, ?, ?, ?, ?, ?)
       `);
       insert.run(
         regId,
-        body.eventId,
-        body.eventTitle || 'Community Real Estate Masterclass',
-        body.name.trim(),
-        body.email.trim(),
-        (body.phone || '').trim(),
-        (body.city || 'Pan-India').trim()
+        eventId,
+        eventTitle,
+        name,
+        email,
+        phone,
+        city
       );
 
       return sendJson(res, 201, {
@@ -311,19 +439,31 @@ const server = http.createServer(async (req, res) => {
       }
 
       const volId = generateId('VOL');
+      const name = sanitizeText(body.name);
+      const email = sanitizeText(body.email);
+      const phone = sanitizeText(body.phone || '');
+      const profession = sanitizeText(body.profession);
+      const state = sanitizeText(body.state || 'Pan-India');
+      const skills = sanitizeText(body.skills);
+      const hours = Number(body.hours || 2);
+
+      if (!name || !email || !profession || !skills) {
+        return sendJson(res, 400, { success: false, error: 'Invalid volunteer details were provided.' });
+      }
+
       const insert = db.prepare(`
         INSERT INTO volunteer_signups (volunteer_id, name, email, phone, profession, state, skills, availability_hours_per_week)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `);
       insert.run(
         volId,
-        body.name.trim(),
-        body.email.trim(),
-        (body.phone || '').trim(),
-        body.profession.trim(),
-        (body.state || 'Pan-India').trim(),
-        body.skills.trim(),
-        Number(body.hours || 2)
+        name,
+        email,
+        phone,
+        profession,
+        state,
+        skills,
+        Number.isFinite(hours) ? hours : 2
       );
 
       return sendJson(res, 201, {

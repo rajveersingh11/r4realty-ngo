@@ -69,6 +69,17 @@ npm run dev
 npm run server
 ```
 
+### Admin access (NGO Data Desk)
+The admin endpoints are protected with HTTP Basic Auth and a matching `X-Admin-Token` header. Set the following environment variables before starting the server if you want to override the local development credentials:
+
+```bash
+export R4REALTY_ADMIN_USERNAME="r4realty-admin"
+export R4REALTY_ADMIN_PASSWORD="foundation-ngo-local"
+export R4REALTY_ADMIN_TOKEN="r4realty-admin-token-local"
+```
+
+The embedded NGO Data Desk in the app automatically signs its admin requests with the matching credentials when running locally.
+
 ### Production Build
 ```bash
 npm run build

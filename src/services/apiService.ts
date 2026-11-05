@@ -51,6 +51,20 @@ export interface ApiResponse<T = unknown> {
 }
 
 const API_BASE = '/api';
+const ADMIN_USERNAME = 'r4realty-admin';
+const ADMIN_PASSWORD = 'foundation-ngo-local';
+const ADMIN_TOKEN = 'r4realty-admin-token-local';
+
+function getAdminAuthHeaders(): Record<string, string> {
+  const savedToken = typeof window !== 'undefined' ? localStorage.getItem('r4_admin_token') : null;
+  const token = savedToken || ADMIN_TOKEN;
+  const basic = typeof btoa === 'function' ? btoa(`${ADMIN_USERNAME}:${ADMIN_PASSWORD}`) : '';
+
+  return {
+    Authorization: `Basic ${basic}`,
+    'X-Admin-Token': token
+  };
+}
 
 // Helper to check if API server is reachable
 export async function checkServerHealth(): Promise<{ online: boolean; info?: any }> {
@@ -252,7 +266,9 @@ export async function fetchAdminData(): Promise<{
   const offlineVolunteers = JSON.parse(localStorage.getItem('r4_offline_volunteers') || '[]');
 
   try {
-    const res = await fetch(`${API_BASE}/admin/data`);
+    const res = await fetch(`${API_BASE}/admin/data`, {
+      headers: getAdminAuthHeaders()
+    });
     if (res.ok) {
       const json = await res.json();
       return {
@@ -279,7 +295,10 @@ export async function updateRecordStatus(type: 'scam' | 'inquiry', id: number, s
   try {
     const res = await fetch(`${API_BASE}/admin/status`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAdminAuthHeaders()
+      },
       body: JSON.stringify({ type, id, status })
     });
     return res.ok;
@@ -290,9 +309,11 @@ export async function updateRecordStatus(type: 'scam' | 'inquiry', id: number, s
 
 // 8. Download URLs
 export function getDbDownloadUrl(): string {
-  return `${API_BASE}/admin/export-db`;
+  const auth = getAdminAuthHeaders()['X-Admin-Token'];
+  return `${API_BASE}/admin/export-db?token=${encodeURIComponent(auth)}`;
 }
 
 export function getCsvExportUrl(table: string): string {
-  return `${API_BASE}/admin/export-csv?table=${encodeURIComponent(table)}`;
+  const auth = getAdminAuthHeaders()['X-Admin-Token'];
+  return `${API_BASE}/admin/export-csv?table=${encodeURIComponent(table)}&token=${encodeURIComponent(auth)}`;
 }

@@ -3,8 +3,9 @@
 
 User-agent: *
 Allow: /
-Disallow: /api/admin/
+Disallow: /api/
+Disallow: /admin/
 
-# Sitemaps
-Sitemap: https://rajveersingh11.github.io/r4realty-ngo/sitemap.xml
+# Canonical site map
 Sitemap: https://gharmargdarshan.org/sitemap.xml
+Sitemap: https://rajveersingh11.github.io/r4realty-ngo/sitemap.xml

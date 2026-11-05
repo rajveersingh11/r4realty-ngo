@@ -15,6 +15,46 @@ import { LegalView } from './components/legal/LegalView';
 import { NgoDataDesk } from './components/admin/NgoDataDesk';
 import { MessageSquare, AlertCircle, X } from 'lucide-react';
 
+const ROUTE_PATHS: Record<string, string> = {
+  home: '/',
+  analytics: '/analytics',
+  calculators: '/calculators',
+  guides: '/guides',
+  protect: '/protect',
+  community: '/community',
+  about: '/about',
+  contact: '/contact',
+  legal: '/legal'
+};
+
+const LEGACY_HASH_MAP: Record<string, string> = {
+  home: '/',
+  analytics: '/analytics',
+  calculators: '/calculators',
+  guides: '/guides',
+  protect: '/protect',
+  community: '/community',
+  about: '/about',
+  contact: '/contact',
+  legal: '/legal'
+};
+
+function resolveTabFromUrl(pathname = window.location.pathname, hash = window.location.hash) {
+  const normalizedPath = pathname.replace(/^\/+|\/+$/g, '');
+  const legacyHash = hash.replace(/^#\/?/, '').trim();
+
+  if (legacyHash && LEGACY_HASH_MAP[legacyHash]) {
+    return legacyHash;
+  }
+
+  if (!normalizedPath || normalizedPath === 'home') {
+    return 'home';
+  }
+
+  const tab = Object.entries(ROUTE_PATHS).find(([, routePath]) => routePath === `/${normalizedPath}`)?.[0];
+  return tab || 'home';
+}
+
 export const App: React.FC = () => {
   const [isNgoDeskOpen, setIsNgoDeskOpen] = useState(false);
   // Theme state
@@ -28,11 +68,7 @@ export const App: React.FC = () => {
     }
   });
 
-  // Active tab state with hash sync
-  const [currentTab, setCurrentTab] = useState<string>(() => {
-    const hash = window.location.hash.replace('#', '');
-    return hash || 'home';
-  });
+  const [currentTab, setCurrentTab] = useState<string>(() => resolveTabFromUrl());
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showTopBanner, setShowTopBanner] = useState(true);
@@ -49,20 +85,43 @@ export const App: React.FC = () => {
     }
   }, [isDark]);
 
-  // Sync hash on popstate
+  // Sync navigation state with browser path history
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '');
-      if (hash) setCurrentTab(hash);
+    const handleLocationChange = () => {
+      const nextTab = resolveTabFromUrl();
+      setCurrentTab(nextTab);
     };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+
+    const handleHashFallback = () => {
+      const legacyHash = window.location.hash.replace(/^#\/?/, '').trim();
+      if (legacyHash && LEGACY_HASH_MAP[legacyHash]) {
+        const nextPath = LEGACY_HASH_MAP[legacyHash];
+        window.history.replaceState({}, '', nextPath);
+        setCurrentTab(legacyHash);
+      }
+    };
+
+    handleLocationChange();
+    handleHashFallback();
+
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleHashFallback);
+
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleHashFallback);
+    };
   }, []);
 
-  // Update hash when tab changes
   const handleSelectTab = (tabId: string) => {
-    setCurrentTab(tabId);
-    window.location.hash = tabId;
+    const nextTab = tabId || 'home';
+    const nextPath = ROUTE_PATHS[nextTab] || '/';
+    setCurrentTab(nextTab);
+    if (window.location.pathname !== nextPath) {
+      window.history.pushState({}, '', nextPath);
+    } else {
+      window.history.replaceState({}, '', nextPath);
+    }
   };
 
   // Keyboard shortcut for Ctrl+K (Search) and Ctrl+Shift+D (NGO Data Desk)
